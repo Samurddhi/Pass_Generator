@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #94e4b1, #e2e87d);
+        }
+        .container {
+            background: white;
+            padding: 55px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .password {
+            font-size: 1.2em;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            width: 100%;
+        }
+        button {
+            padding: 15px;
+            margin: 5px;
+            border: none;
+            background: linear-gradient(to right, #105684, #02212e);
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: linear-gradient(to right, #94a6b1, #1f8560);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Random Password Generator</h2>
+        <label for="length">Password Length:</label>
+        <input type="number" id="length" min="6" max="32" value="12">
+        <br>
+        <label><input type="checkbox" id="lowercase" checked> Lowercase</label>
+        <label><input type="checkbox" id="uppercase" checked> Uppercase</label>
+        <label><input type="checkbox" id="numbers" checked> Numbers</label>
+        <label><input type="checkbox" id="symbols" checked> Symbols</label>
+        <br>
+        <button onclick="generatePassword()">Generate Password</button>
+        <div class="password" id="password"></div>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        <button class="reset-btn" onclick="resetForm()">Reset</button>
+    </div>
+    <script>
+        function generatePassword() {
+            const length = document.getElementById("length").value;
+            const includeLowercase = document.getElementById("lowercase").checked;
+            const includeUppercase = document.getElementById("uppercase").checked;
+            const includeNumbers = document.getElementById("numbers").checked;
+            const includeSymbols = document.getElementById("symbols").checked;
+
+            const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+            const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const numberChars = "0123456789";
+            const symbolChars = "!@#$%^&*()_+[]{}|;:,.<>?";
+            
+            let allChars = "";
+            if (includeLowercase) allChars += lowercaseChars;
+            if (includeUppercase) allChars += uppercaseChars;
+            if (includeNumbers) allChars += numberChars;
+            if (includeSymbols) allChars += symbolChars;
+
+            if (allChars === "") {
+                document.getElementById("password").textContent = "Select at least one option!";
+                return;
+            }
+
+            let password = "";
+            for (let i = 0; i < length; i++) {
+                password += allChars[Math.floor(Math.random() * allChars.length)];
+            }
+
+            document.getElementById("password").textContent = password;
+        }
+
+        function copyToClipboard() {
+            const password = document.getElementById("password").textContent;
+            if (password === "" || password === "Select at least one option!") return;
+            navigator.clipboard.writeText(password).then(() => {
+                alert("Password copied to clipboard!");
+            });
+        }
+
+        function resetForm() {
+            document.getElementById('length').value = 12;
+            document.getElementById('lowercase').checked = true;
+            document.getElementById('uppercase').checked = true;
+            document.getElementById('numbers').checked = true;
+            document.getElementById('symbols').checked = true;
+            document.getElementById('password').innerText = "";
+        }
+    </script>
+</body>
+</html>
